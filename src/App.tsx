@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import "./App.css";
 import Kaleidoscope from "./components/Kaleidoscope/Kaleidoscope0";
-import OptionsMenu from "./components/OptionsMenu/OptionsMenu";
+import OptionsDrawer from "./components/OptionsDrawer/OptionsDrawer";
 
 // TODO: move all the mouse events related code
 // TODO: check if image exists
 
-//const sampleImage = "img/swarovski_kristallwelten_innsbruck.jpg";
-const sampleImage =
-  "https://andreiverner.com/wp-content/uploads/2019/07/hanuman-color-1.jpg";
+const sampleImage = "img/swarovski_kristallwelten_innsbruck.jpg";
+// const sampleImage =
+//   "https://andreiverner.com/wp-content/uploads/2019/07/hanuman-color-1.jpg";
+//const sampleImage = "https://andreiverner.com/wp-content/uploads/2019/07/alien-cave-artwork.jpg";
 
 const DIVISIONS_DEFAULT = 8;
+const RADIUS_DEFAULT = 400;
 
 const App: React.FC = () => {
   const [mouseMoveEnabled, setMouseMoveEnabled] = useState<boolean>(false);
@@ -23,6 +25,7 @@ const App: React.FC = () => {
     left: 0
   });
   const [divisions, setDivisions] = useState<number>(DIVISIONS_DEFAULT);
+  const [radius, setRadius] = useState<number>(RADIUS_DEFAULT);
 
   const onClick = () => {
     setMouseMoveEnabled(prev => {
@@ -57,9 +60,14 @@ const App: React.FC = () => {
     }
   }, [mouseMoveEnabled]);
 
+  // TODO: improve (useReducer)
   const onChangeDivisions = (value: number) => {
     console.log(`onChangeDivisions: ${value}`);
     setDivisions(value);
+  };
+
+  const onChangeRadius = (value: number) => {
+    setRadius(value);
   };
 
   return (
@@ -82,10 +90,14 @@ const App: React.FC = () => {
         Left: {mousePositionRate.left.toFixed(3)}
         <br />
       </p>
-      <OptionsMenu onChangeCount={onChangeDivisions} />
+      <OptionsDrawer
+        onChangeDivisions={onChangeDivisions}
+        onChangeRadius={onChangeRadius}
+      />
       <Kaleidoscope
         imageSrc={sampleImage}
         divisions={divisions}
+        radius={radius}
         {...mousePositionRate}
       />
     </AppDiv>

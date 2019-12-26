@@ -6,6 +6,7 @@ type Props = {
   top: number;
   left: number;
   divisions: number;
+  radius: number;
 };
 
 const Kaleidoscope0: React.FC<Props> = props => {
@@ -17,10 +18,13 @@ const Kaleidoscope0: React.FC<Props> = props => {
   const drawShapes = (
     context: CanvasRenderingContext2D,
     image: CanvasImageSource,
-    divisions: number
+    divisions: number,
+    radius: number
   ) => {
     const imageWidth = image.width as number,
       imageHeight = image.height as number;
+
+    context.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
     for (let i = 0; i < divisions; i++) {
       const startAngle = (i * Math.PI * 2) / divisions;
@@ -32,9 +36,9 @@ const Kaleidoscope0: React.FC<Props> = props => {
         cy = context.canvas.height / 2;
       context.beginPath();
       context.moveTo(cx, cy);
-      context.arc(cx, cy, 400, startAngle, endAngle);
+      context.arc(cx, cy, radius, startAngle, endAngle);
       context.closePath();
-      context.fillStyle = `#0000${i}`;
+      context.fillStyle = `#000000`;
       context.fill();
       context.strokeStyle = "#ffffff";
       context.stroke();
@@ -44,7 +48,7 @@ const Kaleidoscope0: React.FC<Props> = props => {
       if (i % 2 === 0) {
         context.scale(-1, 1);
       }
-      // FIXME: calculations are not correct
+      // FIXME: calculate proper min/max values for X and Y
       const imageXValues = {
         min: -imageWidth / 2,
         max: imageWidth / 2
@@ -58,7 +62,7 @@ const Kaleidoscope0: React.FC<Props> = props => {
       const imageY =
         imageYValues.min + props.top * (imageYValues.max - imageYValues.min);
       context.drawImage(image, imageX, imageY);
-      //context.drawImage(image, -imageWidth / 2, -imageHeight);
+      console.log({ imageX, imageY, imageWidth, imageHeight });
       //
       context.fillText("0", cx, cy);
       context.restore();
@@ -79,7 +83,7 @@ const Kaleidoscope0: React.FC<Props> = props => {
     if (canvasContext && myImage) {
       const htmlImage = myImage as HTMLImageElement;
       htmlImage.onload = () => {
-        drawShapes(canvasContext, myImage, props.divisions);
+        drawShapes(canvasContext, myImage, props.divisions, props.radius);
       };
       htmlImage.src = props.imageSrc;
     }
@@ -87,10 +91,16 @@ const Kaleidoscope0: React.FC<Props> = props => {
 
   useEffect(() => {
     if (canvasContext && myImage) {
-      console.log(props);
-      drawShapes(canvasContext, myImage, props.divisions);
+      drawShapes(canvasContext, myImage, props.divisions, props.radius);
     }
-  }, [props.top, props.left, props.divisions, myImage, canvasContext]);
+  }, [
+    props.top,
+    props.left,
+    props.divisions,
+    props.radius,
+    myImage,
+    canvasContext
+  ]);
 
   return <Canvas setContext={setContext} />;
 };
