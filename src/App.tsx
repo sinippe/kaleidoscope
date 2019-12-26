@@ -7,10 +7,18 @@ import OptionsDrawer from "./components/OptionsDrawer/OptionsDrawer";
 // TODO: move all the mouse events related code
 // TODO: check if image exists
 
-const sampleImage = "img/swarovski_kristallwelten_innsbruck.jpg";
-// const sampleImage =
-//   "https://andreiverner.com/wp-content/uploads/2019/07/hanuman-color-1.jpg";
-//const sampleImage = "https://andreiverner.com/wp-content/uploads/2019/07/alien-cave-artwork.jpg";
+//const sampleImage = "img/swarovski_kristallwelten_innsbruck.jpg";
+//const sampleImage =
+//  "https://andreiverner.com/wp-content/uploads/2019/07/hanuman-color-1.jpg";
+const sampleImage =
+  "https://andreiverner.com/wp-content/uploads/2019/07/alien-cave-artwork.jpg";
+//const sampleImage =
+//  "https://www.poulet.ca/assets/RecipePhotos/_resampled/FillWyIxNDQwIiwiNzAwIl0/california-club.jpg";
+//const sampleImage =
+//  "https://lamouettebblog.files.wordpress.com/2016/03/hybridbar_taps4.jpg";
+//const sampleImage = "https://vl-media.fr/wp-content/uploads/2018/01/trump.jpg";
+//const sampleImage =
+//  "https://previews.123rf.com/images/visharo/visharo1701/visharo170100240/71478803-motif-de-kal%C3%A9idoscope.jpg";
 
 const DIVISIONS_DEFAULT = 8;
 const RADIUS_DEFAULT = 400;
