@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import "./App.css";
-import Kaleidoscope from "./components/Kaleidoscope/Kaleidoscope0";
+import Kaleidoscope from "./components/Kaleidoscope/Kaleidoscope";
 import OptionsDrawer from "./components/OptionsDrawer/OptionsDrawer";
 
 // TODO: move all the mouse events related code
@@ -26,11 +26,11 @@ const RADIUS_DEFAULT = 400;
 const App: React.FC = () => {
   const [mouseMoveEnabled, setMouseMoveEnabled] = useState<boolean>(false);
   const [mousePositionRate, setMousePositionRate] = useState<{
-    top: number;
-    left: number;
+    x: number;
+    y: number;
   }>({
-    top: 0,
-    left: 0
+    x: 0,
+    y: 0
   });
   const [divisions, setDivisions] = useState<number>(DIVISIONS_DEFAULT);
   const [radius, setRadius] = useState<number>(RADIUS_DEFAULT);
@@ -43,8 +43,8 @@ const App: React.FC = () => {
 
   const onMouseMove = (event: MouseEvent) => {
     setMousePositionRate({
-      top: event.pageY / window.innerHeight,
-      left: event.pageX / window.innerWidth
+      x: event.pageX / window.innerWidth,
+      y: event.pageY / window.innerHeight
     });
   };
 
@@ -68,14 +68,17 @@ const App: React.FC = () => {
     }
   }, [mouseMoveEnabled]);
 
-  // TODO: improve (useReducer)
-  const onChangeDivisions = (value: number) => {
-    console.log(`onChangeDivisions: ${value}`);
-    setDivisions(value);
-  };
-
-  const onChangeRadius = (value: number) => {
-    setRadius(value);
+  const onChangeOptions = (option: "divisions" | "radius") => (
+    value: number
+  ) => {
+    switch (option) {
+      case "divisions":
+        setDivisions(value);
+        break;
+      case "radius":
+        setRadius(value);
+        break;
+    }
   };
 
   return (
@@ -93,20 +96,20 @@ const App: React.FC = () => {
       >
         Enabled: {mouseMoveEnabled ? "true" : "false"}
         <br />
-        Top: {mousePositionRate.top.toFixed(3)}
+        X: {mousePositionRate.x.toFixed(3)}
         <br />
-        Left: {mousePositionRate.left.toFixed(3)}
+        Y: {mousePositionRate.y.toFixed(3)}
         <br />
       </p>
       <OptionsDrawer
-        onChangeDivisions={onChangeDivisions}
-        onChangeRadius={onChangeRadius}
+        onChangeDivisions={onChangeOptions("divisions")}
+        onChangeRadius={onChangeOptions("radius")}
       />
       <Kaleidoscope
         imageSrc={sampleImage}
         divisions={divisions}
         radius={radius}
-        {...mousePositionRate}
+        positionRate={mousePositionRate}
       />
     </AppDiv>
   );

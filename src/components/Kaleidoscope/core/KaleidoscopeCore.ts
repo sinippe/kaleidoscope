@@ -1,35 +1,45 @@
+export type Position = {
+  x: number;
+  y: number;
+};
+
 const KaleidoscopeCore = () => {
   const drawSections = (props: {
     context: CanvasRenderingContext2D;
     image: CanvasImageSource;
     divisions: number;
     radius: number;
-    horizontalRate: number;
-    verticalRate: number;
+    positionRate: Position;
   }) => {
     const imageWidth = props.image.width as number,
       imageHeight = props.image.height as number;
+    const deltaAngle = (Math.PI * 2) / props.divisions;
 
-    props.context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    props.context.clearRect(
+      0,
+      0,
+      props.context.canvas.width,
+      props.context.canvas.height
+    );
 
     for (let i = 0; i < props.divisions; i++) {
-      const startAngle = (i * Math.PI * 2) / props.divisions;
-      const endAngle = startAngle + (Math.PI * 2) / props.divisions;
+      const startAngle = i * deltaAngle;
+      const endAngle = startAngle + deltaAngle;
 
       props.context.save();
 
-      const cx = props.context.canvas.width / 2,
-        cy = props.context.canvas.height / 2;
+      const centerX = props.context.canvas.width / 2,
+        centerY = props.context.canvas.height / 2;
       props.context.beginPath();
-      props.context.moveTo(cx, cy);
-      props.context.arc(cx, cy, props.radius, startAngle, endAngle);
+      props.context.moveTo(centerX, centerY);
+      props.context.arc(centerX, centerY, props.radius, startAngle, endAngle);
       props.context.closePath();
       props.context.fillStyle = `#000000`;
       props.context.fill();
       props.context.strokeStyle = "#ffffff";
       props.context.stroke();
       props.context.clip();
-      props.context.translate(cx, cy);
+      props.context.translate(centerX, centerY);
       props.context.rotate(
         Math.PI / 2 + startAngle + (endAngle - startAngle) / 2
       );
@@ -44,18 +54,18 @@ const KaleidoscopeCore = () => {
       };
       const imageX =
         imageXValues.min +
-        props.horizontalRate * (imageXValues.max - imageXValues.min);
+        props.positionRate.x * (imageXValues.max - imageXValues.min);
       const imageYValues = {
         min: -imageHeight,
         max: -props.radius
       };
       const imageY =
         imageYValues.min +
-        props.verticalRate * (imageYValues.max - imageYValues.min);
+        props.positionRate.y * (imageYValues.max - imageYValues.min);
 
       props.context.drawImage(props.image, imageX, imageY);
 
-      props.context.fillText("0", cx, cy);
+      props.context.fillText("0", centerX, centerY);
       props.context.restore();
     }
   };
