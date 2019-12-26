@@ -29,6 +29,14 @@ const Kaleidoscope: React.FC<Props> = props => {
   }, [props.imageSrc]);
 
   useEffect(() => {
+    updateDisplay();
+  }, [props.positionRate, props.divisions, props.radius, image, canvasContext]);
+
+  const onContextUpdate = () => {
+    updateDisplay();
+  };
+
+  const updateDisplay = () => {
     if (canvasContext && image) {
       core.drawSections({
         context: canvasContext,
@@ -38,9 +46,9 @@ const Kaleidoscope: React.FC<Props> = props => {
         positionRate: props.positionRate
       });
     }
-  }, [props.positionRate, props.divisions, props.radius, image, canvasContext]);
+  };
 
-  return <Canvas setContext={setContext} />;
+  return <Canvas setContext={setContext} onContextUpdate={onContextUpdate} />;
 };
 
 export default Kaleidoscope;
