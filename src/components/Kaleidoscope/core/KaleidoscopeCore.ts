@@ -62,10 +62,9 @@ const KaleidoscopeCore = () => {
       const imageY =
         imageYValues.min +
         props.positionRate.y * (imageYValues.max - imageYValues.min);
-
+      // TODO: optimize image drawing in canvas
       props.context.drawImage(props.image, imageX, imageY);
 
-      props.context.fillText("0", centerX, centerY);
       props.context.restore();
     }
   };
