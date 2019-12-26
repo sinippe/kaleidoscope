@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 type Props = {
   setContext: (canvas: CanvasRenderingContext2D) => void;
