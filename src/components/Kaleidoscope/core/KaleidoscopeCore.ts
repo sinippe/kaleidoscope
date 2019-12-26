@@ -36,23 +36,24 @@ const KaleidoscopeCore = () => {
       if (i % 2 === 0) {
         props.context.scale(-1, 1);
       }
-      // FIXME: calculate proper min/max values for X and Y
+      // distance between the 2 points forming the arc
+      const arcLength = 2 * props.radius * Math.sin(Math.PI / props.divisions);
       const imageXValues = {
-        min: -imageWidth / 2,
-        max: imageWidth / 2
+        min: -arcLength / 2,
+        max: -imageWidth + arcLength / 2
       };
       const imageX =
         imageXValues.min +
         props.horizontalRate * (imageXValues.max - imageXValues.min);
       const imageYValues = {
         min: -imageHeight,
-        max: imageHeight
+        max: -props.radius
       };
       const imageY =
         imageYValues.min +
         props.verticalRate * (imageYValues.max - imageYValues.min);
+
       props.context.drawImage(props.image, imageX, imageY);
-      console.log({ imageX, imageY, imageWidth, imageHeight });
       //
       props.context.fillText("0", cx, cy);
       props.context.restore();
