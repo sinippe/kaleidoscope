@@ -104,6 +104,8 @@ const App: React.FC = () => {
       <OptionsDrawer
         onChangeDivisions={onChangeOptions("divisions")}
         onChangeRadius={onChangeOptions("radius")}
+        divisions={divisions}
+        radius={radius}
       />
       <Kaleidoscope
         imageSrc={sampleImage}
