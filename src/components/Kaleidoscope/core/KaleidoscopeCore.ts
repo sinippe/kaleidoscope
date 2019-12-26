@@ -54,7 +54,7 @@ const KaleidoscopeCore = () => {
         props.verticalRate * (imageYValues.max - imageYValues.min);
 
       props.context.drawImage(props.image, imageX, imageY);
-      //
+
       props.context.fillText("0", cx, cy);
       props.context.restore();
     }
