@@ -4,6 +4,8 @@ export type Position = {
 };
 
 const KaleidoscopeCore = () => {
+  let canvasOffscreen: HTMLCanvasElement;
+
   const drawSections = (props: {
     context: CanvasRenderingContext2D;
     image: CanvasImageSource;
@@ -11,8 +13,8 @@ const KaleidoscopeCore = () => {
     radius: number;
     positionRate: Position;
   }) => {
-    const imageWidth = props.image.width as number,
-      imageHeight = props.image.height as number;
+    const imageWidth = props.image.width as number;
+    const imageHeight = props.image.height as number;
     const deltaAngle = (Math.PI * 2) / props.divisions;
 
     props.context.clearRect(
@@ -21,6 +23,27 @@ const KaleidoscopeCore = () => {
       props.context.canvas.width,
       props.context.canvas.height
     );
+
+    if (typeof canvasOffscreen === "undefined") {
+      canvasOffscreen = document.createElement("canvas");
+      canvasOffscreen.width = imageWidth;
+      canvasOffscreen.height = imageHeight;
+    }
+    const contextOffscreen = canvasOffscreen.getContext("2d");
+    if (contextOffscreen !== null) {
+      contextOffscreen.drawImage(props.image, 0, 0);
+    }
+
+    props.context.imageSmoothingEnabled = false;
+    props.context.fillRect(0, 0, imageWidth, imageHeight);
+
+    const { x, y } = getImageCoordinates({
+      angle: Math.sin(Math.PI / props.divisions),
+      imageWidth,
+      imageHeight,
+      positionRate: props.positionRate,
+      radius: props.radius
+    });
 
     for (let i = 0; i < props.divisions; i++) {
       const startAngle = i * deltaAngle;
@@ -34,10 +57,9 @@ const KaleidoscopeCore = () => {
       props.context.moveTo(centerX, centerY);
       props.context.arc(centerX, centerY, props.radius, startAngle, endAngle);
       props.context.closePath();
-      props.context.fillStyle = `#000000`;
-      props.context.fill();
       props.context.strokeStyle = "#ffffff";
       props.context.stroke();
+
       props.context.clip();
       props.context.translate(centerX, centerY);
       props.context.rotate(
@@ -46,27 +68,44 @@ const KaleidoscopeCore = () => {
       if (i % 2 === 0) {
         props.context.scale(-1, 1);
       }
-      // distance between the 2 points forming the arc
-      const arcLength = 2 * props.radius * Math.sin(Math.PI / props.divisions);
-      const imageXValues = {
-        min: -arcLength / 2,
-        max: -imageWidth + arcLength / 2
-      };
-      const imageX =
-        imageXValues.min +
-        props.positionRate.x * (imageXValues.max - imageXValues.min);
-      const imageYValues = {
-        min: -imageHeight,
-        max: -props.radius
-      };
-      const imageY =
-        imageYValues.min +
-        props.positionRate.y * (imageYValues.max - imageYValues.min);
-      // TODO: optimize image drawing in canvas
-      props.context.drawImage(props.image, imageX, imageY);
+
+      props.context.drawImage(canvasOffscreen, x, y, imageWidth, imageHeight);
 
       props.context.restore();
     }
+  };
+
+  const getImageCoordinates = ({
+    radius,
+    angle,
+    imageWidth,
+    imageHeight,
+    positionRate
+  }: {
+    radius: number;
+    angle: number;
+    imageWidth: number;
+    imageHeight: number;
+    positionRate: Position;
+  }) => {
+    // distance between the 2 points forming the arc
+    const arcLength = 2 * radius * angle;
+    const imageXBoundaries = {
+      min: -arcLength / 2,
+      max: -imageWidth + arcLength / 2
+    };
+    const imageX =
+      imageXBoundaries.min +
+      positionRate.x * (imageXBoundaries.max - imageXBoundaries.min);
+    const imageYBoundaries = {
+      min: -imageHeight,
+      max: -radius
+    };
+    const imageY =
+      imageYBoundaries.min +
+      positionRate.y * (imageYBoundaries.max - imageYBoundaries.min);
+
+    return { x: imageX, y: imageY };
   };
 
   return { drawSections };
