@@ -2,47 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Kaleidoscope from "./components/Kaleidoscope/Kaleidoscope";
 import OptionsDrawer from "./components/OptionsDrawer/OptionsDrawer";
+import Config, { ConfigSchema } from "./config/config";
 
 // TODO: move all the mouse events related code
 // TODO: check if image exists
 
-const DIVISIONS_DEFAULT = 18;
-const RADIUS_DEFAULT = 400;
-const IMAGES_LIST = [
-  {
-    name: "Giant plant head",
-    url: "img/swarovski_kristallwelten_innsbruck.jpg"
-  },
-  {
-    name: "Psychedelic 1",
-    url:
-      "https://andreiverner.com/wp-content/uploads/2019/07/hanuman-color-1.jpg"
-  },
-  {
-    name: "Psychedelic 2",
-    url:
-      "https://andreiverner.com/wp-content/uploads/2019/07/alien-cave-artwork.jpg"
-  },
-  {
-    name: "Sandwich",
-    url:
-      "https://www.poulet.ca/assets/RecipePhotos/_resampled/FillWyIxNDQwIiwiNzAwIl0/california-club.jpg"
-  },
-  {
-    name: "Grolar",
-    url:
-      "https://lamouettebblog.files.wordpress.com/2016/03/hybridbar_taps4.jpg"
-  },
-  {
-    name: "Ugly",
-    url: "https://vl-media.fr/wp-content/uploads/2018/01/trump.jpg"
-  },
-  {
-    name: "Kaleidoscope",
-    url:
-      "https://previews.123rf.com/images/visharo/visharo1701/visharo170100240/71478803-motif-de-kal%C3%A9idoscope.jpg"
-  }
-];
+const config: ConfigSchema = Config;
 
 const App: React.FC = () => {
   const [mouseMoveEnabled, setMouseMoveEnabled] = useState<boolean>(false);
@@ -53,9 +18,9 @@ const App: React.FC = () => {
     x: 0,
     y: 0
   });
-  const [divisions, setDivisions] = useState<number>(DIVISIONS_DEFAULT);
-  const [radius, setRadius] = useState<number>(RADIUS_DEFAULT);
-  const [imageUrl, setImageUrl] = useState<string>(IMAGES_LIST[0].url);
+  const [divisions, setDivisions] = useState<number>(config.divisions);
+  const [radius, setRadius] = useState<number>(config.radius);
+  const [imageUrl, setImageUrl] = useState<string>(config.imagesList[0].url);
 
   const onClick = () => {
     setMouseMoveEnabled(prev => {
@@ -114,7 +79,7 @@ const App: React.FC = () => {
         divisions={divisions}
         radius={radius}
         onChangeImage={onChangeImage}
-        imagesList={IMAGES_LIST}
+        imagesList={config.imagesList}
         image={imageUrl}
       />
       <Kaleidoscope
