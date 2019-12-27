@@ -1,6 +1,13 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import styled from "styled-components";
-import { Drawer, Button, Slider, Classes, Label } from "@blueprintjs/core";
+import {
+  Drawer,
+  Button,
+  Slider,
+  Classes,
+  Label,
+  RadioGroup
+} from "@blueprintjs/core";
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
@@ -8,8 +15,16 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 type Props = {
   onChangeDivisions: (value: number) => void;
   onChangeRadius: (value: number) => void;
+  onChangeImage: (url: string) => void;
   divisions?: number;
   radius?: number;
+  image: string;
+  imagesList: Image[];
+};
+
+type Image = {
+  url: string;
+  name: string;
 };
 
 const OptionsDrawer: React.FC<Props> = props => {
@@ -34,6 +49,11 @@ const OptionsDrawer: React.FC<Props> = props => {
     }
   };
 
+  const onChangeImage = (item: { label: string; value: string }) => {
+    props.onChangeImage(item.value);
+  };
+
+  /*
   return (
     <React.Fragment>
       <input
@@ -52,8 +72,8 @@ const OptionsDrawer: React.FC<Props> = props => {
       />
     </React.Fragment>
   );
+  */
 
-  /*
   return (
     <div className="bp3-dark">
       <Button text="Options" onClick={onClickOpenButton} />
@@ -66,6 +86,7 @@ const OptionsDrawer: React.FC<Props> = props => {
         onClose={onCloseDrawer}
         icon="settings"
         title="Options"
+        size={Drawer.SIZE_SMALL}
       >
         <div className={Classes.DRAWER_BODY}>
           <div className={Classes.DIALOG_BODY}>
@@ -88,16 +109,55 @@ const OptionsDrawer: React.FC<Props> = props => {
                 max={800}
                 stepSize={10}
                 onChange={onSliderChange("radius")}
-                labelStepSize={50}
+                labelStepSize={100}
                 value={props.radius}
               />
             </Label>
+            <SimpleSelect
+              items={props.imagesList.map(image => ({
+                label: image.name,
+                value: image.url
+              }))}
+              onChange={onChangeImage}
+              selectedValue={props.image}
+            />
           </div>
         </div>
       </Drawer>
     </div>
   );
-  */
+};
+
+type SimpleSelectProps = {
+  items: SimpleSelectItem[];
+  onChange: (item: SimpleSelectItem) => void;
+  selectedValue: string;
+};
+
+type SimpleSelectItem = {
+  label: string;
+  value: string;
+};
+
+const SimpleSelect: React.FC<SimpleSelectProps> = props => {
+  const onChange = (event: FormEvent<HTMLInputElement>) => {
+    const item = props.items.find(
+      item => item.value === event.currentTarget.value
+    );
+    console.log({ item });
+    if (item) {
+      props.onChange(item);
+    }
+  };
+
+  return (
+    <RadioGroup
+      onChange={onChange}
+      label="Choose image..."
+      options={props.items}
+      selectedValue={props.selectedValue}
+    />
+  );
 };
 
 export default OptionsDrawer;
