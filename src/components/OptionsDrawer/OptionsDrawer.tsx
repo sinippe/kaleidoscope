@@ -119,7 +119,7 @@ const OptionsDrawer: React.FC<Props> = props => {
                 value: image.url
               }))}
               onChange={onChangeImage}
-              selectedValue={props.image}
+              initialValue={props.image}
             />
           </div>
         </div>
@@ -131,7 +131,7 @@ const OptionsDrawer: React.FC<Props> = props => {
 type SimpleSelectProps = {
   items: SimpleSelectItem[];
   onChange: (item: SimpleSelectItem) => void;
-  selectedValue: string;
+  initialValue: string;
 };
 
 type SimpleSelectItem = {
@@ -155,7 +155,7 @@ const SimpleSelect: React.FC<SimpleSelectProps> = props => {
       onChange={onChange}
       label="Choose image..."
       options={props.items}
-      selectedValue={props.selectedValue}
+      selectedValue={props.initialValue}
     />
   );
 };
