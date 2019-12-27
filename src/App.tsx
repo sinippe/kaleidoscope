@@ -20,7 +20,7 @@ const sampleImage =
 //const sampleImage =
 //  "https://previews.123rf.com/images/visharo/visharo1701/visharo170100240/71478803-motif-de-kal%C3%A9idoscope.jpg";
 
-const DIVISIONS_DEFAULT = 8;
+const DIVISIONS_DEFAULT = 18;
 const RADIUS_DEFAULT = 400;
 
 const App: React.FC = () => {
@@ -59,7 +59,6 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log({ mouseMoveEnabled, onMouseMove });
     if (mouseMoveEnabled === true) {
       window.addEventListener("mousemove", onMouseMove);
     } else {
@@ -83,24 +82,6 @@ const App: React.FC = () => {
 
   return (
     <AppDiv>
-      <p
-        style={{
-          position: `static`,
-          top: 0,
-          left: 0,
-          background: `black`,
-          fontSize: `0.9em`,
-          color: `white`,
-          width: `150px`
-        }}
-      >
-        Enabled: {mouseMoveEnabled ? "true" : "false"}
-        <br />
-        X: {mousePositionRate.x.toFixed(3)}
-        <br />
-        Y: {mousePositionRate.y.toFixed(3)}
-        <br />
-      </p>
       <OptionsDrawer
         onChangeDivisions={onChangeOptions("divisions")}
         onChangeRadius={onChangeOptions("radius")}
