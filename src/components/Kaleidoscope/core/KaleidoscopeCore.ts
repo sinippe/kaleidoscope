@@ -28,6 +28,7 @@ const KaleidoscopeCore = () => {
       canvasOffscreen = document.createElement("canvas");
       canvasOffscreen.width = imageWidth;
       canvasOffscreen.height = imageHeight;
+      canvasOffscreen.hidden = true;
     }
     const contextOffscreen = canvasOffscreen.getContext("2d");
     if (contextOffscreen !== null) {
@@ -35,7 +36,6 @@ const KaleidoscopeCore = () => {
     }
 
     props.context.imageSmoothingEnabled = false;
-    props.context.fillRect(0, 0, imageWidth, imageHeight);
 
     const { x, y } = getImageCoordinates({
       angle: Math.sin(Math.PI / props.divisions),
@@ -69,6 +69,7 @@ const KaleidoscopeCore = () => {
         props.context.scale(-1, 1);
       }
 
+      props.context.fillRect(0, 0, imageWidth, imageHeight);
       props.context.drawImage(canvasOffscreen, x, y, imageWidth, imageHeight);
 
       props.context.restore();
