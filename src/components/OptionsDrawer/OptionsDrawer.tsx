@@ -1,16 +1,10 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  Drawer,
-  Button,
-  Slider,
-  Classes,
-  Label,
-  RadioGroup
-} from "@blueprintjs/core";
+import { Drawer, Button, Slider, Classes, Label } from "@blueprintjs/core";
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
+import SimpleSelect from "../SimpleSelect/SimpleSelect";
 
 type Props = {
   onChangeDivisions: (value: number) => void;
@@ -53,29 +47,8 @@ const OptionsDrawer: React.FC<Props> = props => {
     props.onChangeImage(item.value);
   };
 
-  /*
   return (
-    <React.Fragment>
-      <input
-        type="text"
-        value={props.divisions}
-        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          onSliderChange("divisions")(+event.currentTarget.value);
-        }}
-      />
-      <input
-        type="text"
-        value={props.radius}
-        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          onSliderChange("radius")(+event.currentTarget.value);
-        }}
-      />
-    </React.Fragment>
-  );
-  */
-
-  return (
-    <div className="bp3-dark">
+    <OptionsDrawerContainer className="bp3-dark">
       <Button text="Options" onClick={onClickOpenButton} />
       <Drawer
         className="bp3-dark"
@@ -124,40 +97,12 @@ const OptionsDrawer: React.FC<Props> = props => {
           </div>
         </div>
       </Drawer>
-    </div>
+    </OptionsDrawerContainer>
   );
 };
 
-type SimpleSelectProps = {
-  items: SimpleSelectItem[];
-  onChange: (item: SimpleSelectItem) => void;
-  initialValue: string;
-};
-
-type SimpleSelectItem = {
-  label: string;
-  value: string;
-};
-
-const SimpleSelect: React.FC<SimpleSelectProps> = props => {
-  const onChange = (event: FormEvent<HTMLInputElement>) => {
-    const item = props.items.find(
-      item => item.value === event.currentTarget.value
-    );
-    console.log({ item });
-    if (item) {
-      props.onChange(item);
-    }
-  };
-
-  return (
-    <RadioGroup
-      onChange={onChange}
-      label="Choose image..."
-      options={props.items}
-      selectedValue={props.initialValue}
-    />
-  );
-};
+const OptionsDrawerContainer = styled.div`
+  position: absolute;
+`;
 
 export default OptionsDrawer;

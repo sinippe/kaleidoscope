@@ -95,6 +95,7 @@ const App: React.FC = () => {
 const AppDiv = styled.div`
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 
 export default App;
