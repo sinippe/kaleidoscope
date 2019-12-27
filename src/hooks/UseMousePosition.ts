@@ -1,14 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 
-const useMousePosition = (params: { useRate?: boolean }) => {
-  const useRate = params.useRate || false;
+const useMousePosition = (props: {
+  useRate?: boolean;
+  switchActiveOnClick?: boolean;
+  defaultActive?: boolean;
+}) => {
+  const useRate = props.useRate || false;
+  const switchActiveOnClick = props.switchActiveOnClick || false;
+  const defaultActive =
+    (switchActiveOnClick === true && props.defaultActive === true) ||
+    switchActiveOnClick !== true
+      ? true
+      : false;
+
   const [position, setPosition] = useState({
     x: 0,
     y: 0
   });
+  let isActive = defaultActive;
 
   useEffect(() => {
     const onMouseMove = (event: MouseEvent) => {
+      if (!isActive) {
+        return;
+      }
       if (useRate === true) {
         setPosition({
           x: event.clientX / window.innerWidth,
@@ -22,14 +37,23 @@ const useMousePosition = (params: { useRate?: boolean }) => {
       }
     };
 
+    const onClick = () => {
+      isActive = !isActive;
+    };
+
+    window.addEventListener("click", onClick);
     window.addEventListener("mousemove", onMouseMove);
 
     return () => {
+      window.removeEventListener("mousemove", onClick);
       window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
 
-  return position;
+  return {
+    mousePosition: position,
+    mouseMoveisActive: isActive
+  };
 };
 
 export default useMousePosition;
