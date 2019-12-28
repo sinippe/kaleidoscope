@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Drawer, Button, Slider, Classes, Label } from "@blueprintjs/core";
 import "normalize.css";
@@ -14,6 +14,9 @@ type Props = {
   radius?: number;
   image: string;
   imagesList: Image[];
+  isOpen?: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 };
 
 type Image = {
@@ -21,24 +24,44 @@ type Image = {
   name: string;
 };
 
-const OptionsDrawer: React.FC<Props> = props => {
-  const [isOpen, setIsOpen] = useState(false);
+const settings = {
+  divisions: {
+    min: 2,
+    max: 32,
+    stepSize: 2,
+    labelStepSize: 10
+  },
+  radius: {
+    min: 100,
+    max: 800,
+    stepSize: 10,
+    labelStepSize: 100
+  }
+};
 
+const OptionsDrawer: React.FC<Props> = props => {
   const onClickOpenButton = () => {
-    setIsOpen(true);
+    props.onOpen();
   };
 
   const onCloseDrawer = () => {
-    setIsOpen(false);
+    props.onClose();
   };
 
   const onSliderChange = (type: "divisions" | "radius") => (value: number) => {
     switch (type) {
       case "divisions":
-        props.onChangeDivisions(Math.max(0, Math.min(value, 32)));
+        props.onChangeDivisions(
+          Math.max(
+            settings.divisions.min,
+            Math.min(value, settings.divisions.max)
+          )
+        );
         break;
       case "radius":
-        props.onChangeRadius(Math.max(50, Math.min(value, 800)));
+        props.onChangeRadius(
+          Math.max(settings.radius.min, Math.min(value, settings.radius.max))
+        );
         break;
     }
   };
@@ -53,7 +76,7 @@ const OptionsDrawer: React.FC<Props> = props => {
       <Drawer
         className="bp3-dark"
         position="left"
-        isOpen={isOpen}
+        isOpen={props.isOpen}
         canEscapeKeyClose={true}
         canOutsideClickClose={true}
         onClose={onCloseDrawer}
@@ -66,24 +89,17 @@ const OptionsDrawer: React.FC<Props> = props => {
             <Label title="Divisions">
               Divisions
               <Slider
-                className={Classes.SLIDER}
-                min={2}
-                max={32}
-                stepSize={2}
                 onChange={onSliderChange("divisions")}
-                labelStepSize={10}
                 value={props.divisions}
+                {...settings.divisions}
               />
             </Label>
             <Label title="Radius">
               Radius
               <Slider
-                min={100}
-                max={800}
-                stepSize={10}
                 onChange={onSliderChange("radius")}
-                labelStepSize={100}
                 value={props.radius}
+                {...settings.radius}
               />
             </Label>
             <SimpleSelect

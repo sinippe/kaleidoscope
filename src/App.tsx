@@ -5,19 +5,20 @@ import OptionsDrawer from "./components/OptionsDrawer/OptionsDrawer";
 import Config, { ConfigSchema } from "./config/config";
 import useMousePosition from "./hooks/UseMousePosition";
 
-// TODO: check if image exists
-
 const config: ConfigSchema = Config;
 
-const App: React.FC = () => {
+type Props = {};
+
+const App: React.FC<Props> = props => {
   const [divisions, setDivisions] = useState<number>(config.divisions);
   const [radius, setRadius] = useState<number>(config.radius);
   const [imageUrl, setImageUrl] = useState<string>(config.imagesList[0].url);
+  const [optionsDrawerIsOpen, setOptionsDrawerIsOpen] = useState<boolean>(
+    false
+  );
 
-  const { mousePosition, mouseMoveisActive } = useMousePosition({
-    useRate: true,
-    defaultActive: false,
-    switchActiveOnClick: true
+  const [mousePosition, setMousePositionEnabled] = useMousePosition({
+    useRate: true
   });
 
   const onChangeOptions = (option: "divisions" | "radius") => (
@@ -37,6 +38,11 @@ const App: React.FC = () => {
     setImageUrl(url);
   };
 
+  const onOpenOptionsDrawer = (open: boolean) => () => {
+    setOptionsDrawerIsOpen(open);
+    setMousePositionEnabled(!open);
+  };
+
   return (
     <AppDiv>
       <OptionsDrawer
@@ -47,6 +53,9 @@ const App: React.FC = () => {
         onChangeImage={onChangeImage}
         imagesList={config.imagesList}
         image={imageUrl}
+        isOpen={optionsDrawerIsOpen}
+        onOpen={onOpenOptionsDrawer(true)}
+        onClose={onOpenOptionsDrawer(false)}
       />
       <Kaleidoscope
         imageSrc={imageUrl}
