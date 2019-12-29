@@ -7,6 +7,8 @@ type Props = {
   divisions: number;
   radius: number;
   positionRate: Position;
+  onLoadImage?: () => void;
+  onLoadErrorImage?: () => void;
 };
 
 const Kaleidoscope: React.FC<Props> = props => {
@@ -23,7 +25,15 @@ const Kaleidoscope: React.FC<Props> = props => {
   useEffect(() => {
     const htmlImage: HTMLImageElement = new Image();
     htmlImage.onload = () => {
+      if (props.onLoadImage) {
+        props.onLoadImage();
+      }
       setImage(htmlImage);
+    };
+    htmlImage.onerror = () => {
+      if (props.onLoadErrorImage) {
+        props.onLoadErrorImage();
+      }
     };
     htmlImage.src = props.imageSrc;
   }, [props.imageSrc]);

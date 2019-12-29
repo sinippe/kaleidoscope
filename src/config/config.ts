@@ -43,6 +43,10 @@ const Config: ConfigSchema = {
       name: "Kaleidoscope",
       url:
         "https://previews.123rf.com/images/visharo/visharo1701/visharo170100240/71478803-motif-de-kal%C3%A9idoscope.jpg"
+    },
+    {
+      name: "Non existing image",
+      url: "img/error.jpg"
     }
   ]
 };
