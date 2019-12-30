@@ -18,25 +18,16 @@ const useMousePosition = (props: {
   });
 
   const onMouseMove = useCallback((event: Event) => {
-    const mouseEvent = event as MouseEvent;
-    const touchEvent = event as TouchEvent;
-    const mouseX =
-      event.type === "touchmove"
-        ? touchEvent.touches[0].clientX
-        : mouseEvent.clientX;
-    const mouseY =
-      event.type === "touchmove"
-        ? touchEvent.touches[0].clientY
-        : mouseEvent.clientY;
+    const { x, y } = getMousePositionFromEvent(event);
     if (useRate === true) {
       setPosition({
-        x: mouseX / window.innerWidth,
-        y: mouseY / window.innerHeight
+        x: x / window.innerWidth,
+        y: y / window.innerHeight
       });
     } else {
       setPosition({
-        x: mouseX,
-        y: mouseY
+        x,
+        y
       });
     }
   }, []);
@@ -54,6 +45,21 @@ const useMousePosition = (props: {
   });
 
   return [position, setEnabled];
+};
+
+const getMousePositionFromEvent = (event: Event) => {
+  let x = NaN,
+    y = NaN;
+  if (event.type === "touchmove") {
+    const touchEvent = event as TouchEvent;
+    x = touchEvent.touches[0].clientX;
+    y = touchEvent.touches[0].clientY;
+  } else if (event.type === "mousemove") {
+    const mouseEvent = event as MouseEvent;
+    x = mouseEvent.clientX;
+    y = mouseEvent.clientY;
+  }
+  return { x, y };
 };
 
 export default useMousePosition;
