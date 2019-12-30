@@ -57,8 +57,6 @@ const KaleidoscopeCore = () => {
       props.context.moveTo(centerX, centerY);
       props.context.arc(centerX, centerY, props.radius, startAngle, endAngle);
       props.context.closePath();
-      props.context.strokeStyle = "#ffffff";
-      props.context.stroke();
 
       props.context.clip();
       props.context.translate(centerX, centerY);
