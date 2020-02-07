@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Canvas from "../Canvas/Canvas";
-import KaleidoscopeCore, { Position } from "./core/KaleidoscopeCore";
+import Core, { Position, KaleidoscopeCore } from "./core/KaleidoscopeCore";
 
 type Props = {
   imageSrc: string;
@@ -16,7 +16,7 @@ const Kaleidoscope: React.FC<Props> = props => {
     CanvasRenderingContext2D
   >();
   const [image, setImage] = useState<CanvasImageSource>();
-  let core = KaleidoscopeCore();
+  const [core, setCore] = useState<KaleidoscopeCore>();
 
   const setContext = (context: CanvasRenderingContext2D) => {
     setCanvasContext(context);
@@ -39,23 +39,28 @@ const Kaleidoscope: React.FC<Props> = props => {
   }, [props.imageSrc]);
 
   useEffect(() => {
-    updateDisplay();
-  }, [props.positionRate, props.divisions, props.radius, image, canvasContext]);
-
-  const onContextUpdate = () => {
-    updateDisplay();
-  };
-
-  const updateDisplay = () => {
-    if (canvasContext && image) {
+    if (core) {
       core.drawSections({
-        context: canvasContext,
-        image: image,
-        divisions: props.divisions,
-        radius: props.radius,
         positionRate: props.positionRate
       });
     }
+  }, [props.positionRate, core]);
+
+  useEffect(() => {
+    if (canvasContext && image) {
+      setCore(
+        Core({
+          context: canvasContext,
+          divisions: props.divisions,
+          image,
+          radius: props.radius
+        })
+      );
+    }
+  }, [props.divisions, props.radius, image, canvasContext]);
+
+  const onContextUpdate = () => {
+    //updateDisplay();
   };
 
   return <Canvas setContext={setContext} onContextUpdate={onContextUpdate} />;
