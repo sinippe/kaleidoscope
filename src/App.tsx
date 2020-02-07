@@ -5,15 +5,22 @@ import OptionsDrawer from "./components/OptionsDrawer/OptionsDrawer";
 import Config, { ConfigSchema } from "./config/config";
 import useMousePosition from "./hooks/UseMousePosition";
 import withToast, { WithToastProps } from "./components/WithToast/WithToast";
+import configService, { ConfigService } from "./service/ConfigService";
 
 const config: ConfigSchema = Config;
 
 type Props = WithToastProps;
 
 const App: React.FC<Props> = props => {
-  const [divisions, setDivisions] = useState<number>(config.divisions);
-  const [radius, setRadius] = useState<number>(config.radius);
-  const [imageUrl, setImageUrl] = useState<string>(config.imagesList[0].url);
+  const [divisions, setDivisions] = useState<number>(
+    configService.getDivisions() || config.divisions
+  );
+  const [radius, setRadius] = useState<number>(
+    configService.getRadius() || config.radius
+  );
+  const [imageUrl, setImageUrl] = useState<string>(
+    configService.getImageUrl() || config.imagesList[0].url
+  );
   const [optionsDrawerIsOpen, setOptionsDrawerIsOpen] = useState<boolean>(
     false
   );
@@ -28,15 +35,18 @@ const App: React.FC<Props> = props => {
     switch (option) {
       case "divisions":
         setDivisions(value);
+        configService.setDivisions(value);
         break;
       case "radius":
         setRadius(value);
+        configService.setRadius(value);
         break;
     }
   };
 
   const onChangeImage = (url: string) => {
     setImageUrl(url);
+    configService.setImageUrl(url);
   };
 
   const onLoadImage = () => {
