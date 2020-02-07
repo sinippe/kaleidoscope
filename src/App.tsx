@@ -5,7 +5,7 @@ import OptionsDrawer from "./components/OptionsDrawer/OptionsDrawer";
 import Config, { ConfigSchema } from "./config/config";
 import useMousePosition from "./hooks/UseMousePosition";
 import withToast, { WithToastProps } from "./components/WithToast/WithToast";
-import configService, { ConfigService } from "./service/ConfigService";
+import configService from "./service/ConfigService";
 
 const config: ConfigSchema = Config;
 
