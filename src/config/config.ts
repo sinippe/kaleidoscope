@@ -8,7 +8,7 @@ export interface ConfigSchema {
 }
 
 const Config: ConfigSchema = {
-  divisions: 16,
+  divisions: 8,
   radius: 400,
   imagesList: [
     {
