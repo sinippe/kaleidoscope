@@ -40,7 +40,7 @@ const Kaleidoscope: React.FC<Props> = props => {
 
   useEffect(() => {
     if (core) {
-      core.drawSections({
+      core.draw({
         positionRate: props.positionRate
       });
     }
@@ -53,7 +53,8 @@ const Kaleidoscope: React.FC<Props> = props => {
           context: canvasContext,
           divisions: props.divisions,
           image,
-          radius: props.radius
+          radius: props.radius,
+          animate: true
         })
       );
     }

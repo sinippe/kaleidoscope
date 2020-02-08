@@ -1,10 +1,12 @@
+import gsap from "gsap";
+
 export type Position = {
   x: number;
   y: number;
 };
 
 export type KaleidoscopeCore = {
-  drawSections: (props: { positionRate: Position }) => void;
+  draw: (props: { positionRate: Position }) => void;
   getImageCoordinates: (props: {
     imageWidth: number;
     imageHeight: number;
@@ -22,12 +24,14 @@ const core = ({
   image,
   context,
   divisions,
-  radius
+  radius,
+  animate
 }: {
   image: CanvasImageSource;
   context: CanvasRenderingContext2D;
   divisions: number;
   radius: number;
+  animate?: boolean;
 }): KaleidoscopeCore => {
   const getImageCoordinates = ({
     imageWidth,
@@ -92,8 +96,6 @@ const core = ({
 
   canvasOffscreen = document.createElement("canvas");
   // TODO: calculate proper width & height
-  //const imageHorizontalResizeRate = imageWidth / (areaWidth * 1.5);
-  //const imageVerticalResizeRate = imageHeight / (areaHeight * 1.5);
   const imageResizeRate = 1.0;
   canvasOffscreen.width = imageWidth * imageResizeRate;
   canvasOffscreen.height = imageHeight * imageResizeRate;
@@ -113,10 +115,14 @@ const core = ({
       canvasOffscreen.height
     );
   }
-
   context.imageSmoothingEnabled = true;
 
-  const drawSections = (props: { positionRate: Position }) => {
+  const coordinates = {
+    imageX: NaN,
+    imageY: NaN
+  };
+
+  const draw = (props: { positionRate: Position }) => {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
     const { x: imageX, y: imageY } = getImageCoordinates({
@@ -127,40 +133,65 @@ const core = ({
       positionRate: props.positionRate
     });
 
-    for (let i = 0; i < divisions; i++) {
-      const startAngle = i * deltaAngle;
-      const endAngle = startAngle + deltaAngle;
+    const drawSections = () => {
+      for (let i = 0; i < divisions; i++) {
+        const startAngle = i * deltaAngle;
+        const endAngle = startAngle + deltaAngle;
 
-      context.save();
+        context.save();
 
-      const centerX = context.canvas.width / 2,
-        centerY = context.canvas.height / 2;
-      context.beginPath();
-      context.moveTo(centerX, centerY);
-      context.arc(centerX, centerY, radius, startAngle, endAngle);
-      context.closePath();
+        const centerX = context.canvas.width / 2,
+          centerY = context.canvas.height / 2;
+        context.beginPath();
+        context.moveTo(centerX, centerY);
+        context.arc(centerX, centerY, radius, startAngle, endAngle);
+        context.closePath();
 
-      context.clip();
-      context.translate(centerX, centerY);
-      context.rotate(Math.PI / 2 + startAngle + (endAngle - startAngle) / 2);
-      if (i % 2 === 0) {
-        context.scale(-1, 1);
+        context.clip();
+        context.translate(centerX, centerY);
+        context.rotate(Math.PI / 2 + startAngle + (endAngle - startAngle) / 2);
+        if (i % 2 === 0) {
+          context.scale(-1, 1);
+        }
+
+        context.fillRect(0, 0, canvasOffscreen.width, canvasOffscreen.height);
+
+        context.drawImage(
+          canvasOffscreen,
+          coordinates.imageX,
+          coordinates.imageY,
+          canvasOffscreen.width,
+          canvasOffscreen.height
+        );
+
+        context.restore();
       }
+    };
 
-      context.fillRect(0, 0, canvasOffscreen.width, canvasOffscreen.height);
-      context.drawImage(
-        canvasOffscreen,
+    if (
+      (isNaN(coordinates.imageX) && isNaN(coordinates.imageY)) ||
+      animate !== true
+    ) {
+      coordinates.imageX = imageX;
+      coordinates.imageY = imageY;
+    }
+
+    if (animate === true) {
+      gsap.to(coordinates, {
+        duration: 0.5,
         imageX,
         imageY,
-        canvasOffscreen.width,
-        canvasOffscreen.height
-      );
-
-      context.restore();
+        onUpdate: function() {
+          drawSections();
+        },
+        overwrite: true
+      });
+    } else {
+      drawSections();
     }
   };
 
-  return { drawSections, getImageCoordinates, getAreaSize };
+  return { draw, getImageCoordinates, getAreaSize };
 };
 
 export default core;
