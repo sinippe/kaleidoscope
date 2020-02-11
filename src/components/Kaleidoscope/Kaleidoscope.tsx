@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Canvas from "../Canvas/Canvas";
 import Core, { Position, KaleidoscopeCore } from "./core/KaleidoscopeCore";
+import withLoading, { WithLoadingProps } from "../WithLoading/WithLoading";
 
 type Props = {
   imageSrc: string;
@@ -11,7 +12,7 @@ type Props = {
   onLoadErrorImage?: () => void;
 };
 
-const Kaleidoscope: React.FC<Props> = props => {
+const Kaleidoscope: React.FC<Props & WithLoadingProps> = props => {
   const [canvasContext, setCanvasContext] = useState<
     CanvasRenderingContext2D
   >();
@@ -24,18 +25,22 @@ const Kaleidoscope: React.FC<Props> = props => {
 
   useEffect(() => {
     const htmlImage: HTMLImageElement = new Image();
+
     htmlImage.onload = () => {
       if (props.onLoadImage) {
         props.onLoadImage();
       }
       setImage(htmlImage);
+      props.loadingComplete();
     };
     htmlImage.onerror = () => {
       if (props.onLoadErrorImage) {
         props.onLoadErrorImage();
       }
+      props.loadingComplete();
     };
     htmlImage.src = props.imageSrc;
+    props.loadingStart();
   }, [props.imageSrc]);
 
   useEffect(() => {
@@ -67,4 +72,4 @@ const Kaleidoscope: React.FC<Props> = props => {
   return <Canvas setContext={setContext} onContextUpdate={onContextUpdate} />;
 };
 
-export default Kaleidoscope;
+export default withLoading(Kaleidoscope);
