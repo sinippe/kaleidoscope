@@ -38,7 +38,7 @@ const withLoading = <P extends WithLoadingProps>(
 };
 
 const ProgressBarContainer = styled.div`
-  left: 50vh;
+  left: calc(50vw - 150px);
   top: 50vh;
   margin: 0;
   width: 300px;
