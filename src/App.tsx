@@ -67,6 +67,7 @@ const App: React.FC<Props> = props => {
 
   useEffect(() => {
     setMousePositionEnabled(!optionsDrawerIsOpen);
+    // eslint-disable-next-line
   }, [optionsDrawerIsOpen]);
 
   return (
