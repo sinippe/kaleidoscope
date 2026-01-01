@@ -7,7 +7,7 @@ const useMousePosition = (props: {
   { x: number; y: number },
   React.Dispatch<React.SetStateAction<boolean>>
 ] => {
-  const [enabled, setEnabled] = useState(props.enabled ? props.enabled : true);
+  const [enabled, setEnabled] = useState(!!props.enabled);
 
   const [mousePosition, setMousePosition] = useState<{
     x: number;
