@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Drawer, Button, Slider, Classes, Label } from "@blueprintjs/core";
+import { Drawer, Button, Slider, Classes, Label, DrawerSize } from "@blueprintjs/core";
 import "normalize.css";
 import "@blueprintjs/core/lib/css/blueprint.css";
 import "@blueprintjs/icons/lib/css/blueprint-icons.css";
@@ -71,10 +71,10 @@ const OptionsDrawer: React.FC<Props> = props => {
   };
 
   return (
-    <OptionsDrawerContainer className="bp3-dark">
+    <OptionsDrawerContainer className="bp6-dark">
       <Button text="Options" onClick={onClickOpenButton} />
       <Drawer
-        className="bp3-dark"
+        className="bp6-dark"
         position="left"
         isOpen={props.isOpen}
         canEscapeKeyClose={true}
@@ -82,7 +82,7 @@ const OptionsDrawer: React.FC<Props> = props => {
         onClose={onCloseDrawer}
         icon="settings"
         title="Options"
-        size={Drawer.SIZE_SMALL}
+        size={DrawerSize.SMALL}
       >
         <div className={Classes.DRAWER_BODY}>
           <div className={Classes.DIALOG_BODY}>
