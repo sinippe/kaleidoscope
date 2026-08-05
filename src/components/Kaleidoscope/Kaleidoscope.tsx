@@ -16,7 +16,7 @@ const Kaleidoscope: React.FC<Props & WithLoadingProps> = props => {
   const [canvasContext, setCanvasContext] = useState<
     CanvasRenderingContext2D
   >();
-  const [image, setImage] = useState<CanvasImageSource>();
+  const [image, setImage] = useState<HTMLImageElement>();
   const [core, setCore] = useState<KaleidoscopeCore>();
 
   const setContext = (context: CanvasRenderingContext2D) => {
