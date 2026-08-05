@@ -47,7 +47,7 @@ const useMousePosition = (props: {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchmove", onMouseMove);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [enabled]);
 
   return [mousePosition, setEnabled];
