@@ -18,17 +18,17 @@ const Config: ConfigSchema = {
     {
       name: "Psychedelic 1",
       url:
-        "https://andreiverner.com/wp-content/uploads/2019/07/hanuman-color-1.jpg"
+        "https://fractalika.com/image/cache/catalog/psihodelicheskaya-mandala-nastennyj-dekor-dlya-interera-svetitsya-v-ultrafiolete-fluorestsentnaya-kartina-psihodelicheskoe-iskusstvo-zakazat-s-dostavkoj-800x800.jpg"
     },
     {
       name: "Psychedelic 2",
       url:
-        "https://andreiverner.com/wp-content/uploads/2019/07/alien-cave-artwork.jpg"
+        "https://andreiverner.com/wp-content/uploads/2024/11/HN-DJ-Booth-Art-1400x700.jpg"
     },
     {
       name: "Sandwich",
       url:
-        "https://www.poulet.ca/assets/RecipePhotos/_resampled/FillWyIxNDQwIiwiNzAwIl0/california-club.jpg"
+        "https://www.datocms-assets.com/129288/1725392697-california-club.jpg?auto=format&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.5&ar=1:1&w=800&h=800"
     },
     {
       name: "Grolar",
