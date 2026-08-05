@@ -11,7 +11,7 @@ const withLoading = <P extends WithLoadingProps>(
   Component: React.FC<P>
 ): React.FC<Omit<P, keyof WithLoadingProps>> => props => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  let displayTimeout: number;
+  let displayTimeout: NodeJS.Timeout;
 
   const loadingStart = () => {
     clearTimeout(displayTimeout);
