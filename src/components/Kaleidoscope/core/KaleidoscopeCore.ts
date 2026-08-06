@@ -27,7 +27,7 @@ const core = ({
   radius,
   animate
 }: {
-  image: CanvasImageSource;
+  image: HTMLImageElement;
   context: CanvasRenderingContext2D;
   divisions: number;
   radius: number;

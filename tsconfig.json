@@ -13,7 +13,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "preserve",
+    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "noUncheckedSideEffectImports": false
   },
   "include": ["src"]
 }

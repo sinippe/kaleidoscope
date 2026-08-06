@@ -1,17 +1,17 @@
 import React, { useRef } from "react";
-import { IToastProps, Toaster, IToasterProps } from "@blueprintjs/core";
+import { OverlayToaster, OverlayToasterProps, ToastProps } from "@blueprintjs/core";
 
 export type WithToastProps = {
-  addToast: (props: IToastProps) => void;
+  addToast: (props: ToastProps) => void;
 };
 
 const withToast = <P extends WithToastProps>(
   Component: React.FC<P>,
-  toasterProps: IToasterProps
+  props: OverlayToasterProps
 ): React.FC<Omit<P, keyof WithToastProps>> => props => {
-  const toaster = useRef<Toaster>(null);
+  const toaster = useRef<OverlayToaster>(null);
 
-  const addToast = (props: IToastProps) => {
+  const addToast = (props: ToastProps) => {
     if (toaster.current) {
       toaster.current.show(props);
     }
@@ -19,8 +19,8 @@ const withToast = <P extends WithToastProps>(
 
   return (
     <React.Fragment>
-      <Toaster {...toasterProps} ref={toaster}></Toaster>
-      <Component addToast={addToast} {...(props as P)} />;
+      <OverlayToaster {...props} ref={toaster} />
+      <Component {...(props as P)} addToast={addToast} />;
     </React.Fragment>
   );
 };
